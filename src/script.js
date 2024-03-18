@@ -18,32 +18,64 @@ function randomCard(values = ["green", "red", "yellow", "blue"]) {
   return values[card];
 }
 
-function showPattern(pattern) {
-  for (let card = 0; card < pattern.length; card++) {
-    $(`#${pattern[card]}`).fadeIn(100).fadeOut(100).fadeIn(100);
+function makeBlink(object, times) {
+  for (let time = 0; time < times; time++) {
+
+    object.fadeIn(100).fadeOut(100).fadeIn(100);
+    object.fadeIn(100).fadeOut(100).fadeIn(100);
+    
   }
 }
 
-function displayLevel(level, timeout = false) {
-  if (timeout) {
-    setTimeout(function () {
-      $("#level").text(level);
-    }, timeout);
-  } else {
-    $("#level").text(level);
+function showPattern(pattern) {
+  for (let card = 0; card < pattern.length; card++) {
+
+    makeBlink($(`#${pattern[card]}`));
+
   }
+}
+
+function displayLevel(currentLevel) {
+  $("#level").text("Level " + currentLevel.toString());
 }
 
 function startingAlert() {
-  displayLevel("Starting");
-  displayLevel("Starting.", 500);
-  displayLevel("Starting..", 1000);
-  displayLevel("Starting...", 1500);
   executeSound("opening");
+  makeBlink($("#level").text("Starting"), 5);
 }
 
-function startGame() {
+function saveStartingPoint() {
+  return $("body").html;
+}
+
+function isPlayable(level) {
+  if (level === 30) {
+    return false;
+  }
+  return true;
+}
+
+function startGame(playable = true) {
   startingAlert();
+
+  setTimeout(function () {
+    let level = 1;
+    let pattern = [];
+
+    while (playable) {
+      displayLevel(level);
+
+      let newCard = randomCard;
+
+      pattern.push(newCard);
+
+      showPattern(pattern);
+
+      playable = setTimeout(isPlayable(level), 3000);
+
+      level++;
+    }
+  }, 3000);
 }
 
 $(document).keypress(function (key) {
