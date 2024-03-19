@@ -13,25 +13,23 @@ function animatePress(card) {
   }, 100);
 }
 
-function randomCard(values = ["green", "red", "yellow", "blue"]) {
-  var card = Math.ceil(Math.random * 4);
+function randomCard(values = ["", "green", "red", "yellow", "blue"]) {
+  var card = Math.ceil(Math.random() * 4);
   return values[card];
 }
 
-function makeBlink(object, times) {
+function makeBlink(object, times, twice = true) {
   for (let time = 0; time < times; time++) {
-
     object.fadeIn(100).fadeOut(100).fadeIn(100);
-    object.fadeIn(100).fadeOut(100).fadeIn(100);
-    
+    if (twice) {
+      object.fadeIn(100).fadeOut(100).fadeIn(100);
+    }
   }
 }
 
 function showPattern(pattern) {
   for (let card = 0; card < pattern.length; card++) {
-
-    makeBlink($(`#${pattern[card]}`));
-
+    setTimeout(makeBlink($(`#${pattern[card]}`), 2, false), 3000);
   }
 }
 
@@ -58,24 +56,20 @@ function isPlayable(level) {
 function startGame(playable = true) {
   startingAlert();
 
-  setTimeout(function () {
-    let level = 1;
-    let pattern = [];
+  let level = 1;
+  let pattern = [];
 
-    while (playable) {
-      displayLevel(level);
+  displayLevel(level);
 
-      let newCard = randomCard;
+  let newCard = randomCard();
 
-      pattern.push(newCard);
+  pattern.push(newCard);
 
-      showPattern(pattern);
+  showPattern(pattern);
 
-      playable = setTimeout(isPlayable(level), 3000);
+  playable = isPlayable(level);
 
-      level++;
-    }
-  }, 3000);
+  level++;
 }
 
 $(document).keypress(function (key) {
