@@ -6,6 +6,12 @@ function executeSound(sound) {
   audio.play();
 }
 
+function waitFor(milliseconds) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+}
+
 function animatePress(card) {
   $(`#${card}`).addClass("pressed");
   setTimeout(function () {
@@ -48,32 +54,34 @@ function saveStartingPoint() {
 
 function isPlayable(level) {
   if (level === 30) {
-    return false;
+    return true;
   }
-  return true;
+  return false;
 }
 
 function startGame(playable = true) {
-  startingAlert();
-
   let level = 1;
   let pattern = [];
+  let lost = false;
 
-  displayLevel(level);
+  while (!lost) {
+    displayLevel(level);
 
-  let newCard = randomCard();
+    let newCard = randomCard();
 
-  pattern.push(newCard);
+    pattern.push(newCard);
 
-  showPattern(pattern);
+    showPattern(pattern);
 
-  playable = isPlayable(level);
+    lost = isPlayable(level);
 
-  level++;
+    level++;
+  }
 }
 
 $(document).keypress(function (key) {
   if (key.keyCode == 32) {
-    startGame();
+    startingAlert();
+    waitFor(3000).then(startGame);
   }
 });
