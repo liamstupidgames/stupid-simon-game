@@ -66,22 +66,6 @@ function userLost() {
 function readPattern() {
   let userPattern = []
   
-  $("#green").click(function(){
-    userPattern.push("green")
-  });
-
-  $("#red").click(function(){
-    userPattern.push("red")
-  });
-  
-  $("#yellow").click(function(){
-    userPattern.push("yellow")
-  });
-
-  $("#blue").click(function(){
-    userPattern.push("blue")
-  });
-
 }
 
 function playRound(levelPassed = 1, patternPassed = [], gameStatus = true) {
