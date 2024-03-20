@@ -35,7 +35,7 @@ function makeBlink(object, times, twice = true) {
 
 function showPattern(pattern) {
   for (let card = 0; card < pattern.length; card++) {
-    setTimeout(makeBlink($(`#${pattern[card]}`), 2, false), 3000);
+    waitFor(14000).then(makeBlink($(`#${pattern[card]}`), 1, false));
   }
 }
 
@@ -63,9 +63,19 @@ function userLost() {
   alert("lost");
 }
 
-function readPattern() {
-  let userPattern = []
-  
+function verifyGame(pattern) {
+  let userPattern = [];
+
+  let card = 0;
+
+  while (userPattern[card] === pattern[card]) {
+    if (userPattern.length === pattern.length) {
+      playRound(level + 1, pattern, true);
+      break;
+    }
+    card++;
+  }
+  userLost();
 }
 
 function playRound(levelPassed = 1, patternPassed = [], gameStatus = true) {
@@ -82,17 +92,7 @@ function playRound(levelPassed = 1, patternPassed = [], gameStatus = true) {
 
     showPattern(pattern);
 
-    let userPattern = readPattern();
-
-    alert(userPattern)
-
-    waitFor(3000).then(function () {
-      if (userWon(pattern, userPattern)) {
-        playRound(level + 1, pattern, true);
-      } else {
-        userLost();
-      }
-    });
+    verifyGame(pattern);
   }
 }
 
