@@ -52,19 +52,44 @@ function saveStartingPoint() {
   return $("body").html;
 }
 
-function isPlayable(level) {
-  if (level === 30) {
-    return true;
+function userWon(pattern) {
+  if (pattern.length === 30) {
+    return false;
   }
-  return false;
+  return true;
 }
 
-function startGame(playable = true) {
-  let level = 1;
-  let pattern = [];
-  let lost = false;
+function userLost() {
+  alert("lost");
+}
 
-  while (!lost) {
+function readPattern() {
+  let userPattern = []
+  
+  $("#green").click(function(){
+    userPattern.push("green")
+  });
+
+  $("#red").click(function(){
+    userPattern.push("red")
+  });
+  
+  $("#yellow").click(function(){
+    userPattern.push("yellow")
+  });
+
+  $("#blue").click(function(){
+    userPattern.push("blue")
+  });
+
+}
+
+function playRound(levelPassed = 1, patternPassed = [], gameStatus = true) {
+  let level = levelPassed;
+  let pattern = patternPassed;
+  let playable = gameStatus;
+
+  if (playable) {
     displayLevel(level);
 
     let newCard = randomCard();
@@ -73,15 +98,23 @@ function startGame(playable = true) {
 
     showPattern(pattern);
 
-    lost = isPlayable(level);
+    let userPattern = readPattern();
 
-    level++;
+    alert(userPattern)
+
+    waitFor(3000).then(function () {
+      if (userWon(pattern, userPattern)) {
+        playRound(level + 1, pattern, true);
+      } else {
+        userLost();
+      }
+    });
   }
 }
 
 $(document).keypress(function (key) {
   if (key.keyCode == 32) {
     startingAlert();
-    waitFor(3000).then(startGame);
+    waitFor(3000).then(playRound);
   }
 });
