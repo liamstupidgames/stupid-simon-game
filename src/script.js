@@ -1,7 +1,7 @@
 let level = 1;
 let pattern = [];
 let playable = true;
-
+let userSelectedColors = [];
 function executeSound(sound) {
   var audio = new Audio(
     `https://raw.githubusercontent.com/liamstupidgames/stupid-simon-game/master/assets/sounds/${sound}.mp3`
@@ -52,10 +52,6 @@ function startingAlert() {
   makeBlink($("#level").text("Starting"), 5);
 }
 
-function saveStartingPoint() {
-  return $("body").html;
-}
-
 function userWon(pattern) {
   if (pattern.length === 30) {
     return false;
@@ -67,22 +63,20 @@ function userLost() {
   alert("lost");
 }
 
-function verifyGame(pattern) {
-  let userPattern = [];
+function verifyGame(userSelection) {
+  if (userSelectedColors.length <= pattern.length) {
+    userSelectedColors.push(userSelection);
+  }
 }
 
-function playRound(level, pattern, playable) {
-  if (playable) {
-    displayLevel(level);
+function playRound() {
+  displayLevel(level);
 
-    let newCard = randomCard();
+  let newCard = randomCard();
 
-    pattern.push(newCard);
+  pattern.push(newCard);
 
-    showPattern(pattern);
-
-    verifyGame(pattern);
-  }
+  showPattern(pattern);
 }
 
 function gameStarded() {
@@ -92,14 +86,14 @@ function gameStarded() {
 $(document).keypress(function (key) {
   if (key.keyCode == 32 && !gameStarded()) {
     startingAlert();
-    waitFor(3000).then(function () {
-      playRound(level, pattern, playable);
+    waitFor(2000).then(function () {
+      playRound();
     });
   }
 });
 
 $(".card").on("click", function (btn) {
   if (gameStarded()) {
-    alert(this.id);
+    verifyGame(this.id);
   }
 });
