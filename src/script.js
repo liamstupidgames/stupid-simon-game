@@ -23,7 +23,7 @@ function animatePress(card) {
   }, 100);
 }
 
-function randomCard(values = ["", "green", "red", "yellow", "blue"]) {
+function randomCard(values = ["#PLACEHOLDER_IGNORE", "green", "red", "yellow", "blue"]) {
   var card = Math.ceil(Math.random() * 4);
   return values[card];
 }
