@@ -2,6 +2,8 @@ let level = 1;
 let pattern = [];
 let playable = true;
 let userSelectedColors = [];
+let currentCard = 0;
+
 function executeSound(sound) {
   var audio = new Audio(
     `https://raw.githubusercontent.com/liamstupidgames/stupid-simon-game/master/assets/sounds/${sound}.mp3`
@@ -64,13 +66,27 @@ function userLost() {
 }
 
 function verifyGame(userSelection) {
-  if (userSelectedColors.length <= pattern.length) {
-    userSelectedColors.push(userSelection);
+    
+  userSelectedColors.push(userSelection);
+
+    if (userSelectedColors.length <= pattern.length) {
+      if (userSelectedColors[currentCard] === pattern[currentCard]) {
+        currentCard++;
+      } else {
+        userLost();
+      }
+    } else {
+      level++;
+      userWon();
+      playRound();
+    }
   }
-}
 
 function playRound() {
   displayLevel(level);
+
+  currentCard = 0;
+  userSelectedColors = [];
 
   let newCard = randomCard();
 
