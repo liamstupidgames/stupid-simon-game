@@ -25,7 +25,9 @@ function animatePress(card) {
   }, 100);
 }
 
-function randomCard(values = ["#PLACEHOLDER_IGNORE", "green", "red", "yellow", "blue"]) {
+function randomCard(
+  values = ["#PLACEHOLDER_IGNORE", "green", "red", "yellow", "blue"]
+) {
   var card = Math.ceil(Math.random() * 4);
   return values[card];
 }
@@ -55,10 +57,7 @@ function startingAlert() {
 }
 
 function userWon(pattern) {
-  if (pattern.length === 30) {
-    return false;
-  }
-  return true;
+  alert("won");
 }
 
 function userLost() {
@@ -66,21 +65,25 @@ function userLost() {
 }
 
 function verifyGame(userSelection) {
-    
   userSelectedColors.push(userSelection);
+  console.log(userSelectedColors);
+  console.log(pattern);
 
-    if (userSelectedColors.length <= pattern.length) {
-      if (userSelectedColors[currentCard] === pattern[currentCard]) {
-        currentCard++;
+  if (userSelectedColors.length <= pattern.length) {
+    console.log("pass");
+    if (userSelectedColors[currentCard] === pattern[currentCard]) {
+      if (userSelectedColors.length === pattern.length) {
+        level++;
+        userWon();
+        playRound();
       } else {
-        userLost();
+        currentCard++;
       }
     } else {
-      level++;
-      userWon();
-      playRound();
+      userLost();
     }
   }
+}
 
 function playRound() {
   displayLevel(level);
@@ -108,7 +111,7 @@ $(document).keypress(function (key) {
   }
 });
 
-$(".card").on("click", function (btn) {
+$(".card").click(function (btn) {
   if (gameStarded()) {
     verifyGame(this.id);
   }
