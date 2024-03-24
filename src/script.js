@@ -162,6 +162,7 @@ $(document).keypress(function (key) {
 
 $(".card").click(function (btn) {
   if (gameStarded()) {
+    executeSound(`${this.id}`);
     $(`#${this.id}`).addClass("pressed");
     verifyGame(this.id);
   }
