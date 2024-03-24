@@ -3,6 +3,7 @@ let pattern = [];
 let playable = true;
 let userSelectedColors = [];
 let currentCard = 0;
+let cheats = false;
 
 function executeSound(sound) {
   var audio = new Audio(
@@ -71,13 +72,26 @@ function restartGame() {
   location.reload();
 }
 
+function enableCheats() {
+  cheats = true;
+
+  console.log("░░░░░░░░░░░░░░░░░░░░░░░░░░");
+  console.log("░░░█▀▀▀░█▀▀▀░░█▀▀░▀▀█░░█░░");
+  console.log("░░░█░▀█░█░▀█░░█▀▀░▄▀░░░▀░░");
+  console.log("░░░▀▀▀▀░▀▀▀▀░░▀▀▀░▀▀▀░░▀░░");
+  console.log("░░░░░░░░░░░░░░░░░░░░( ͡° ͜u ͡°)_╭∩╮");
+}
+
+function cheatPattern() {
+  console.log("======================================================== ");
+  console.log("Current Pattern: " + pattern);
+  console.log("========================================================");
+}
+
 function verifyGame(userSelection) {
   userSelectedColors.push(userSelection);
-  console.log(userSelectedColors);
-  console.log(pattern);
 
   if (userSelectedColors.length <= pattern.length) {
-    console.log("pass");
     if (userSelectedColors[currentCard] === pattern[currentCard]) {
       if (userSelectedColors.length === pattern.length) {
         level++;
@@ -86,7 +100,10 @@ function verifyGame(userSelection) {
           playRound();
         });
       } else {
-        currentCard++;
+        waitFor(200).then(function () {
+          $(`#${userSelection}`).removeClass("pressed");
+          currentCard++;
+        });
       }
     } else {
       userLost();
@@ -102,6 +119,10 @@ function clearCache() {
   if ($("#main").hasClass("green")) {
     $("#main").removeClass("green");
   }
+  $("#green").removeClass("pressed");
+  $("#red").removeClass("pressed");
+  $("#yellow").removeClass("pressed");
+  $("#blue").removeClass("pressed");
 
   currentCard = 0;
   userSelectedColors = [];
@@ -118,6 +139,10 @@ function playRound() {
   let newCard = randomCard();
 
   pattern.push(newCard);
+
+  if (cheats) {
+    cheatPattern();
+  }
 
   showPattern(newCard);
 }
@@ -137,6 +162,7 @@ $(document).keypress(function (key) {
 
 $(".card").click(function (btn) {
   if (gameStarded()) {
+    $(`#${this.id}`).addClass("pressed");
     verifyGame(this.id);
   }
 });
