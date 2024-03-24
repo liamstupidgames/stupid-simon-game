@@ -55,12 +55,20 @@ function startingAlert() {
 }
 
 function userWon(pattern) {
-  executeSound("")
+  executeSound("correct");
   $("#main").addClass("green");
 }
 
 function userLost() {
+  executeSound("wrong");
   $("#main").addClass("red");
+  waitFor(1000).then(function () {
+    restartGame();
+  });
+}
+
+function restartGame() {
+  location.reload();
 }
 
 function verifyGame(userSelection) {
