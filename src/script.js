@@ -41,10 +41,8 @@ function makeBlink(object, times, twice = true) {
   }
 }
 
-function showPattern(pattern) {
-  for (let card = 0; card < pattern.length; card++) {
-    waitFor(14000).then(makeBlink($(`#${pattern[card]}`), 1, false));
-  }
+function showPattern(card) {
+  waitFor(14000).then(makeBlink($(`#${card}`), 1, false));
 }
 
 function displayLevel(currentLevel) {
@@ -57,11 +55,12 @@ function startingAlert() {
 }
 
 function userWon(pattern) {
-  alert("won");
+  executeSound("")
+  $("#main").addClass("green");
 }
 
 function userLost() {
-  alert("lost");
+  $("#main").addClass("red");
 }
 
 function verifyGame(userSelection) {
@@ -75,7 +74,9 @@ function verifyGame(userSelection) {
       if (userSelectedColors.length === pattern.length) {
         level++;
         userWon();
-        playRound();
+        waitFor(300).then(function () {
+          playRound();
+        });
       } else {
         currentCard++;
       }
@@ -85,7 +86,22 @@ function verifyGame(userSelection) {
   }
 }
 
+function clearCache() {
+  if ($("#main").hasClass("red")) {
+    $("#main").removeClass("red");
+  }
+
+  if ($("#main").hasClass("green")) {
+    $("#main").removeClass("green");
+  }
+
+  currentCard = 0;
+  userSelectedColors = [];
+}
+
 function playRound() {
+  clearCache();
+
   displayLevel(level);
 
   currentCard = 0;
@@ -95,7 +111,7 @@ function playRound() {
 
   pattern.push(newCard);
 
-  showPattern(pattern);
+  showPattern(newCard);
 }
 
 function gameStarded() {
